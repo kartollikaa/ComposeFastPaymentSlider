@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Fast Payment Slider</string>
+    <string name="fast_payment_payment_in_process">payment…</string>
+    <string name="fast_payment_payment_failed">Payment failed</string>
+    <string name="fast_payment_pull_to_pay">pull to pay</string>
+    <string name="estimated_time_minutes_text">%s min</string>
+    <string name="loyalty">Лояльность</string>
+    <string name="estimated_time">Время ожидания</string>
+    <string name="cart_products_count">Количество товаров в корзине: %1$s</string>
+    <string name="error">Error</string>
+    <string name="paying">Paying</string>
+    <string name="sync">Sync</string>
+    <string name="idle">Idle</string>
+    <string name="sync_error">Sync error</string>
+    <string name="show_draggable_slider">Отображать слайдер</string>
+    <string name="current_status">Текущий статус: %1$s</string>
+    <string name="pull_to_pay">Тяни для оплаты</string>
+    <string name="fast_payment_estimated_time">~2 минуты</string>
+    <string name="unknown">Unknown</string>
+    <string name="error_sample_1">Ошибка</string>
 </resources>
