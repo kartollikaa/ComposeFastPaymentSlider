@@ -104,7 +104,10 @@ class FastPaymentMeasurer(
       shimmerPlaceable.placeRelative(0, 0)
       pullToPayPlaceable.placeRelative(thumbWidth, 0)
       progressPlaceable.placeRelative(fastPaymentDraggableState.progressOffset, 0)
-      payingPlaceable.placeRelative(fastPaymentDraggableState.payingOffset, 0)
+      payingPlaceable.placeRelative(
+        x = fastPaymentDraggableState.progressOffset - fastPaymentDraggableState.endOfTrackWidth,
+        y = 0
+      )
       endContentPlaceable.placeRelative(occupiedWidth - endContentPlaceable.width, 0)
       thumbPlaceable?.placeRelative(fastPaymentDraggableState.offset.toInt(), 0)
       errorPlaceable.placeRelative(0, 0)

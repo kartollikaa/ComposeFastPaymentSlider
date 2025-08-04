@@ -75,11 +75,6 @@ class FastPaymentDraggableState internal constructor(
   val progressOffset: Int
     get() = progressOffsetAnimatable.value.toInt()
 
-  private val payingAnimatable = Animatable(0f)
-
-  val payingOffset: Int
-    get() = payingAnimatable.value.toInt()
-
   internal val anchoredDraggableState = AnchoredDraggableState(
       initialValue = Start,
       anchors = DraggableAnchors {
@@ -128,14 +123,6 @@ class FastPaymentDraggableState internal constructor(
           targetValue = progressOffsetTarget.toFloat(),
           animationSpec = spring(stiffness = 500f)
       )
-    }
-
-    launch {
-      val payingTargetOffset = when (cartState) {
-        PAYING -> 0f
-        else -> -allWidth / 2f
-      }
-      payingAnimatable.animateTo(payingTargetOffset)
     }
   }
 
