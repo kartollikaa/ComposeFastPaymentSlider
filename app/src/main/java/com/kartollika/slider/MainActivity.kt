@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
         LocalDarkThemeActive provides darkTheme
       ) {
         FastPaymentSliderTheme(
-          darkTheme = LocalDarkThemeActive.current
+          darkTheme = false
         ) {
           Surface(
             modifier = Modifier

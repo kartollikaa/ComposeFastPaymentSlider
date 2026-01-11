@@ -221,17 +221,21 @@ fun FastPaymentScreen(
       fastPaymentDraggableState = fastPaymentDraggableState
     )
 
-    FastPaymentView(
-      modifier = Modifier
-        .padding(bottom = 32.dp)
-        .padding(horizontal = 32.dp)
-        .align(Alignment.CenterHorizontally),
-      fastPaymentState = fastPaymentState,
-      fastPaymentDraggableState = fastPaymentDraggableState,
-      onSwiped = {
-        fastPaymentState = fastPaymentState.paying()
-      }
-    )
+    FastPaymentSliderTheme(
+      darkTheme = LocalDarkThemeActive.current
+    ) {
+      FastPaymentView(
+        modifier = Modifier
+          .padding(bottom = 32.dp)
+          .padding(horizontal = 32.dp)
+          .align(Alignment.CenterHorizontally),
+        fastPaymentState = fastPaymentState,
+        fastPaymentDraggableState = fastPaymentDraggableState,
+        onSwiped = {
+          fastPaymentState = fastPaymentState.paying()
+        }
+      )
+    }
   }
 }
 
