@@ -38,6 +38,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kartollika.slider.R
 import com.kartollika.slider.fastpayment.compose.FastPaymentLayoutId.Progress
@@ -329,7 +330,7 @@ private fun FastPaymentPreviewContent(
       },
       pullToPayContent = {
         Text(
-            text = "Тяни для оплаты",
+            text = stringResource(R.string.pull_to_pay),
             style = FastPaymentSliderTheme.typography.headline20Regular
         )
       },
@@ -357,7 +358,7 @@ private fun FastPaymentPreviewContent(
             }
 
             Text(
-                text = "Время ожидания",
+                text = stringResource(R.string.estimated_time),
                 style = FastPaymentSliderTheme.typography.label12
             )
           }

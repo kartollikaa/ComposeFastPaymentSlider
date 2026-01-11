@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -33,6 +32,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -59,6 +59,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.kartollika.slider.fastpayment.Stack
 import com.kartollika.slider.fastpayment.compose.FastPaymentButton
 import com.kartollika.slider.fastpayment.compose.FastPaymentDraggableState
 import com.kartollika.slider.fastpayment.compose.FastPaymentProduct
@@ -76,6 +77,7 @@ import com.kartollika.slider.fastpayment.compose.FastPaymentState.LoyaltyVO.Acti
 import com.kartollika.slider.fastpayment.compose.FastPaymentState.LoyaltyVO.NoLoyalty
 import com.kartollika.slider.fastpayment.compose.SwipeButtonAnchor
 import com.kartollika.slider.fastpayment.compose.rememberFastPaymentDraggableState
+import com.kartollika.slider.fastpayment.haptic.ProgressVibrator
 import com.kartollika.slider.placeholder.PlaceholderHighlight
 import com.kartollika.slider.placeholder.placeholder
 import com.kartollika.slider.placeholder.shimmer
@@ -88,8 +90,6 @@ import com.kartollika.slider.ui.theme.FastPaymentSliderTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
-import com.kartollika.slider.fastpayment.Stack
-import com.kartollika.slider.fastpayment.haptic.ProgressVibrator
 import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit.MILLISECONDS
@@ -148,7 +148,7 @@ fun FastPaymentScreen(
     mutableStateOf(
       FastPaymentState(
         id = "",
-        totalPrice = "120 Р",
+        totalPrice = "$4.85",
         products = persistentListOf(
           FastPaymentProduct(
             image = image(R.drawable.croissant_example)
@@ -333,7 +333,7 @@ private fun FastPaymentView(
         modifier = Modifier
           .fillMaxSize()
           .wrapContentSize(),
-        text = "Идет оплата..",
+        text = stringResource(R.string.payment_in_progress),
         color = FastPaymentSliderTheme.drinkitColors.textIcon80,
         style = FastPaymentSliderTheme.typography.headline18Regular,
         maxLines = 1,
@@ -436,7 +436,7 @@ private fun CenterContent(fastPaymentState: FastPaymentState) {
 
     if (hasEstimatedTime(fastPaymentState)) {
       Text(
-        text = "~2 минуты",
+        text = stringResource(R.string.fast_payment_estimated_time),
         style = FastPaymentSliderTheme.typography.label12,
         color = FastPaymentSliderTheme.drinkitColors.textIcon100,
         maxLines = 1,
@@ -573,9 +573,9 @@ private fun FastPaymentControls(
   ) {
     Price(fastPaymentState, fastPaymentUpdate)
     ErrorText(errorText, errorTextChanged)
-    LoyaltyAndEstimatedTime(fastPaymentState, fastPaymentUpdate)
     CartItems(fastPaymentState, fastPaymentUpdate)
     States(fastPaymentState, fastPaymentUpdate)
+    EstimatedTime(fastPaymentState, fastPaymentUpdate)
     DraggableSliderVisibility(fastPaymentState, fastPaymentUpdate)
     Theme(darkThemeChanged)
     IdleHint(fastPaymentDraggableState, fastPaymentState, fastPaymentUpdate)
@@ -621,7 +621,6 @@ private fun IdleHint(
   }
 
   Column {
-    Text("Подсказка про 'тянуть для оплаты'")
     Row(
       verticalAlignment = Alignment.CenterVertically
     ) {
@@ -635,7 +634,7 @@ private fun IdleHint(
           idleHintEnabled = checked
         }
       )
-      Text("Включить подсказку")
+      Text(stringResource(R.string.enable_hint_label))
     }
   }
 }
@@ -656,7 +655,7 @@ private fun Theme(darkThemeChanged: (Boolean) -> Unit) {
       }
     )
 
-    Text("Темная тема")
+    Text(stringResource(R.string.dark_theme))
   }
 }
 
@@ -807,25 +806,6 @@ private fun CartItems(
 }
 
 @Composable
-private fun LoyaltyAndEstimatedTime(
-  fastPaymentState: FastPaymentState,
-  fastPaymentUpdate: (FastPaymentState) -> Unit,
-) {
-  Row {
-    Box(
-      modifier = Modifier.weight(1f)
-    ) {
-      Loyalty(fastPaymentState, fastPaymentUpdate)
-    }
-    Box(
-      modifier = Modifier.weight(1f)
-    ) {
-      EstimatedTime(fastPaymentState, fastPaymentUpdate)
-    }
-  }
-}
-
-@Composable
 private fun EstimatedTime(
   fastPaymentState: FastPaymentState,
   fastPaymentUpdate: (FastPaymentState) -> Unit,
@@ -896,16 +876,16 @@ private fun Price(
   Column(
     verticalArrangement = Arrangement.spacedBy(8.dp)
   ) {
-    Text("Цена")
-    TextField(
+    Text(stringResource(R.string.price_label))
+    OutlinedTextField(
       modifier = Modifier
         .fillMaxWidth(),
       value = fastPaymentState.totalPrice,
       colors = TextFieldDefaults.colors(
-        unfocusedContainerColor = Color.LightGray,
+        unfocusedContainerColor = Color.Black.copy(alpha = 0.1f),
+        focusedContainerColor = Color.Black.copy(alpha = 0.2f),
         unfocusedIndicatorColor = Color.Transparent,
-        focusedContainerColor = Color.LightGray,
-        focusedIndicatorColor = Color.Transparent,
+        focusedIndicatorColor = Color.Black.copy(alpha = 0.3f),
       ),
       shape = CircleShape,
       onValueChange = { value ->
@@ -923,16 +903,16 @@ private fun ErrorText(
   Column(
     verticalArrangement = Arrangement.spacedBy(8.dp)
   ) {
-    Text("Сообщение об ошибке")
-    TextField(
+    Text(stringResource(R.string.error_message_label))
+    OutlinedTextField(
       modifier = Modifier
         .fillMaxWidth(),
       value = errorText,
       colors = TextFieldDefaults.colors(
-        focusedContainerColor = Color.LightGray,
-        unfocusedContainerColor = Color.LightGray,
-        focusedIndicatorColor = Color.Transparent,
+        unfocusedContainerColor = Color.Black.copy(alpha = 0.1f),
+        focusedContainerColor = Color.Black.copy(alpha = 0.2f),
         unfocusedIndicatorColor = Color.Transparent,
+        focusedIndicatorColor = Color.Black.copy(alpha = 0.3f),
       ),
       shape = CircleShape,
       onValueChange = fastPaymentUpdate
